@@ -65,6 +65,7 @@ svgWidgets = (function (svgObjects) {
             let childWidget = document.createElementNS("http://www.w3.org/2000/svg", item.type);
 
             for (let [key, value] of Object.entries(item.props)) {
+                // console.log(`${key} - ${value}`);
                 childWidget.setAttribute(key, value);
             }
 
@@ -117,38 +118,40 @@ svgWidgets = (function (svgObjects) {
             return;
 
         for (let [key, value] of Object.entries(item.props)) {
-
             toolbarControls.appendChild(createInputRow(key, value, 'control-row'));
         }
-        toolbarControls.appendChild(createCheckRow('Animate', item['haveAnimation'], 'control-row', function(){
+        toolbarControls.appendChild(createCheckRow('Animate', item['haveAnimation'], 'control-row-skip', function () {
             item['haveAnimation'] = !item['haveAnimation'];
             item.animations.push({});
             rerender();
         }));
 
-        if(item['haveAnimation'])
+        if (item['haveAnimation']) {
             animationContainer.classList.remove('hide');
+
+            createAnimationBlock(item.animations);
+        }
         else
             animationContainer.classList.add('hide');
 
-        createAnimationBlock(item.animations);
 
         saveButton.addEventListener('click', function () {
             const item = widgetList[_selected];
             let props = {};
             for (let child of toolbarControls.childNodes) {
                 let c = child.childNodes;
-                if(c[1])
+                if ((!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this') && c[1])
                     props[c[0].innerHTML.toLowerCase()] = c[1].value;
             }
 
             item.props = props;
-            
+
             const anims = item.animations;
             let anim = {};
             for (let child of toolbarAnimations.childNodes) {
                 let c = child.childNodes;
-                anim[c[1].getAttribute('data-key')] = c[1].value;
+                if (!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this')
+                    anim[c[1].getAttribute('data-key')] = c[1].value;
             }
             anims[0] = anim;
             item.animations = anims;
@@ -157,7 +160,7 @@ svgWidgets = (function (svgObjects) {
             rerender();
         });
 
-        
+
         renderAnimationProps();
     }
 
@@ -275,8 +278,8 @@ svgWidgets = (function (svgObjects) {
         });
     }
 
-    function saveAnimationProps(anims){
-        
+    function saveAnimationProps(anims) {
+
         let props = {};
         for (let child of toolbarAnimations.childNodes) {
             let c = child.childNodes;
@@ -292,40 +295,44 @@ svgWidgets = (function (svgObjects) {
         if (item) {
             const anims = item.animations;
             if (anims) {
-                anims.forEach((anim, index) => {     
-                    for (let [key, value] of Object.entries(anim)) {  
+                // anims.forEach((anim, index) => {     
+                let anim = anims[_selectedAnimation];
+                if (anim)
+                    for (let [key, value] of Object.entries(anim)) {
                         // let childWidget = document.createElement('div');
                         // childWidget.setAttribute('class', 'animation-row');
-            
+
                         // let label = document.createElement('label');
                         // label.innerHTML = key.toUpperCase();
-            
+
                         // let input = document.createElement('input');
                         // input.value = value;
                         // input.setAttribute('data-key', key);
                         // // input.addEventListener('change', function(){
                         // //     ListeningStateChangedEvent();return
                         // // });
-            
+
                         // childWidget.appendChild(label);
                         // childWidget.appendChild(input);
-            
+
                         toolbarAnimations.appendChild(createInputRow(key, value, 'animation-row'));
 
                     }
-                })
+                // })
             }
         }
-        
+
     }
 
-    function createInputRow(key, value, rowClass){
-        
+    function createInputRow(key, value, rowClass) {
+
         let childWidget = document.createElement('div');
         childWidget.setAttribute('class', rowClass);
 
         let label = document.createElement('label');
         label.innerHTML = key.toUpperCase();
+        if (rowClass === 'control-row-skip')
+            label.setAttribute('data-key', 'skip-this');
 
         let input = document.createElement('input');
         input.value = value;
@@ -336,13 +343,16 @@ svgWidgets = (function (svgObjects) {
         return childWidget;
     }
 
-    function createCheckRow(key, value, rowClass, callback){
-        
+    function createCheckRow(key, value, rowClass, callback) {
+
         let childWidget = document.createElement('div');
         childWidget.setAttribute('class', rowClass);
 
         let label = document.createElement('label');
         label.innerHTML = key.toUpperCase();
+        if (rowClass === 'control-row-skip') {
+            label.setAttribute('data-key', 'skip-this');
+        }
 
         let input = document.createElement('input');
         input.checked = value;
@@ -355,46 +365,46 @@ svgWidgets = (function (svgObjects) {
         return childWidget;
     }
 
-    function createAnimationBlock(anims){
+    function createAnimationBlock(anims) {
 
-        if(anims.length == 0)
+        if (anims.length == 0)
             return;
-        
+
         let animationBlocks = document.createElement('div');
         animationBlocks.classList.add('animation-blocks');
 
-        for(let i=0; i<anims.length; i++){
+        for (let i = 0; i < anims.length; i++) {
             let chip = document.createElement('a');
+            chip.setAttribute('data-key', 'skip-this');
             chip.classList.add('chip');
-            chip.innerText = 'Animation '+(i+1);
-            chip.addEventListener('click', function(){
+            chip.innerText = 'Animation ' + (i + 1);
+            chip.addEventListener('click', function () {
                 saveAnimationProps(anims);
                 _selectedAnimation = i;
                 renderToolbar();
             });
 
-            if(i === _selectedAnimation)
+            if (i === _selectedAnimation)
                 chip.classList.add('selected-chip');
 
             animationBlocks.appendChild(chip);
         }
 
-        
+
         let chip = document.createElement('a');
         chip.classList.add('chip');
         chip.classList.add('add');
         chip.innerText = '+';
-        chip.addEventListener('click', function(){
+        chip.addEventListener('click', function () {
             saveAnimationProps(anims);
             anims.push({});
             rerender();
         });
         animationBlocks.appendChild(chip);
 
-        console.log(animationBlocks);
         toolbarControls.appendChild(animationBlocks);
     }
-    
+
 
     return {
         addWidget,

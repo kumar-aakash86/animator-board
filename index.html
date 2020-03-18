@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="container">
+        <div id="header">
+            <div class="logo">SVG Generator</div>
+            <div class="middle"></div>
+            <div class="export">
+                <input type="button" value="EXPORT" id="exportButton">
+            </div>
+        </div>
+        <div id="wrapper">
+            <div class="widgets">
+                <ul class="widgetControls">
+                    <li><a onclick="addCircle()">Circle</a></li>
+                    <li><a onclick="addRect()">Rect</a></li>
+                </ul>
+                <div id="widgetHeirarchyContainer">
+                    <h3>Hierarchy</h3>
+                    <ul id="widgetHierarchy"></ul>
+                </div>
+            </div>
+            <div class="body">
+                <div class="preview-box">
+                </div>
+            </div>
+            <div class="toolbar">
+                <h3>Properties</h3>
+                <div id="toolbarControls"></div>
+                <div class="animation-control hide">
+                    <h3>Animation Properties</h3>
+                    <div id="addAnimationPanel">
+                    </div>
+                    <div id="toolbarAnimations"></div>
+                </div>
+                <div class="control">
+                    <input type="button" value="SAVE" id="saveButton" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script src="js/svg-objects.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+
+        (function () {
+            svgWidgets.init({
+                saveButton: '#saveButton',
+                exportButton: '#exportButton'
+            });
+        })();
+
+        function addCircle() {
+            svgWidgets.addWidget('circle');
+        }
+        function addRect() {
+            svgWidgets.addWidget('rect');
+        }
+    </script>
+</body>
+
+</html>

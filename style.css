@@ -1,0 +1,292 @@
+html, body{
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+input[type=button]{
+    
+    color: #fff;
+    background-color: dodgerblue;
+    border: none;
+}
+
+a{
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.hide{
+    display: none;
+}
+
+.show{
+    display: block;
+}
+
+pre {
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+   }
+   
+#container{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+#header{
+    height: 50px;
+    background-color: blueviolet;
+    display: flex;
+    flex-direction: row;
+}
+#header .middle{
+    flex: 1;
+}
+
+#header .logo{
+    align-self: start;
+    display: block;
+    padding: 15px;
+    font-size: 20px;
+    color: #fff;
+}
+
+#header .export{
+    align-self: flex-end;
+    height: 100%;
+}
+#header .export input[type=button]{
+    height: 100%;
+    padding: 0 20px;
+}
+
+#wrapper{
+    flex: 1;
+    width: 100%;
+    /* height: 100vh; */
+    display: flex;
+}
+
+.body{
+    flex: 3;
+    /* height: 100vh; */
+    background-color: #000;
+}
+
+.body .preview-box{
+    height: 80%;
+    display: block;
+    width: 80%;
+    margin: 10%;
+    background-color: #fff;
+}
+
+.widgets{
+    flex: 1;
+    /* height: 100vh; */
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.widgets ul.widgetControls{
+    flex: 1;
+    list-style-type: none;
+    padding: 20px;
+    margin: 0;
+    border-bottom: solid 1px #000;
+}
+
+ul.widgetControls li{
+    width: 100%;;
+}
+ul.widgetControls li a{
+    font-size: 20px;
+    display: block;
+    padding: 10px;
+}
+ul.widgetControls li a:hover{
+    background-color: #000;
+    color: #fff;
+}
+
+
+.widgets #widgetHeirarchyContainer{
+    flex: 1;
+    padding: 5px;
+}
+.widgets ul#widgetHierarchy{
+    list-style-type: none;
+    padding: 0 10px;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+
+.widgets ul#widgetHierarchy li{
+    padding: 10px;
+}
+.widgets ul#widgetHierarchy li.selected{
+    background-color: #dcdcdc;
+}
+.widgets ul#widgetHierarchy li a{
+    cursor: pointer;
+}
+
+
+/* TOOLBAR */
+.toolbar{
+    flex: 1;
+    /* height: 100vh; */
+    flex-direction: column;
+    display: flex;
+}
+.toolbar h3{
+    padding: 0 20px;
+}
+
+.toolbar #toolbarControls{
+    flex: 1;
+    padding: 0 10px;
+}
+.toolbar .control-row{
+    flex-direction: row;
+    display: flex;
+}
+.toolbar .control-row label{ 
+    flex: 1;
+}
+.toolbar .control-row input{ 
+    flex: 1;
+    width: 100px;
+}
+
+.toolbar .animation-control{
+    border-top: solid 1px #000;
+    flex: 1;
+    width: 100%;
+    height: 100px;
+}
+
+.toolbar .control{
+    align-self: flex-end;
+    width: 100%;
+}
+.toolbar .control input[type=button]{
+    width: 100%;
+    padding: 10px;
+}
+/* TOOLBAR */
+
+/* ANIMATION */
+#addAnimationPanel{
+    display: flex;
+    flex-direction: row;
+}
+#addAnimationPanel select{
+    flex: 1;
+    padding: 10px;
+}
+#addAnimationPanel input[type=button]{
+    width: 40px;
+    font-size: 30px;
+}
+#toolbarAnimations{
+    padding: 10px;
+    
+    max-height: 25vh;
+    overflow-y: auto;
+}
+
+#toolbarAnimations .animation-row{
+    display: block;
+    padding-bottom: 10px;
+}
+ #toolbarAnimations .animation-row > *{display: block;}
+
+
+ .animation-blocks{
+     padding: 10px;
+     display: flex;
+     flex-wrap: wrap;
+ }
+
+ .animation-blocks .chip{
+     padding: 5px;
+     font-size: 12px;
+     background-color: #a9a9a9;
+     border-radius: 5px;
+     border: solid 1px #dcdcdc;
+     color: #fff;
+     text-align: center;
+     vertical-align: middle;
+ }
+ .animation-blocks .chip.selected-chip{
+     background-color: cadetblue;
+ }
+ .animation-blocks .chip.add{
+    padding: 0;
+     background-color: chocolate;
+     font-size: 20px;
+     text-align: center;
+     width: 25px;
+ }
+/* ANIMATION */
+
+
+
+
+/* CODE BOX */
+.cover{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    filter: opacity(.5);
+}
+
+.code-box{
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.export-box-header{
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    padding: 10px;
+}
+.export-box-header h3{
+    flex: 1;
+}
+.export-box-header a{
+    align-self: end;
+}
+.export-code-body{
+    flex: 1;
+    padding: 5%;
+}
+.export-code-body #export-area{
+    width: 100%;
+    border: solid 1px #000;
+    height: 100%;
+    resize: none;
+    /* white-space: pre-wrap; */
+}
+/* CODE BOX */

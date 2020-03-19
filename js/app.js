@@ -13,6 +13,7 @@ svgWidgets = (function (svgObjects) {
     let animationContainer = document.querySelector('.animation-control');
     let addAnimationPanel = document.querySelector('#addAnimationPanel');
     let toolbarAnimations = document.querySelector('#toolbarAnimations');
+    let pathPointBox = document.querySelector('.path-points-box');
 
     let saveButton, exportButton, deleteButton;
     let selectedLabel;
@@ -57,16 +58,19 @@ svgWidgets = (function (svgObjects) {
         let widget;
         switch (type) {
             case 'circle':
-                widget = svgObjects.circle.getCircle();
+                widget = svgObjects.circle.getShape();
                 break;
             case 'rect':
-                widget = svgObjects.rect.getRect();
+                widget = svgObjects.rect.getShape();
                 break;
             case 'ellipse':
-                widget = svgObjects.ellipse.getEllipse();
+                widget = svgObjects.ellipse.getShape();
                 break;
             case 'line':
-                widget = svgObjects.line.getLine();
+                widget = svgObjects.line.getShape();
+                break;
+            case 'polygon':
+                widget = svgObjects.polygon.getShape();
                 break;
         }
 
@@ -76,7 +80,7 @@ svgWidgets = (function (svgObjects) {
         }
     }
 
-    changeDimension = () => {        
+    changeDimension = () => {
         previewBox.style.width = svgProps.frameWidth.value + 'px';
         previewBox.style.height = svgProps.frameHeight.value + 'px';
         rerender();
@@ -156,9 +160,16 @@ svgWidgets = (function (svgObjects) {
         }
 
         svgProps.selectedLabel.textContent = item.type;
+        
+        const pointKey = item['break'];
+        if(pointKey)
+            pathPointBox.style.display = 'block';
+        else
+            pathPointBox.style.display = 'none';
 
         for (let [key, value] of Object.entries(item.props)) {
-            toolbarControls.appendChild(createInputRow(key, value, 'control-row'));
+            if(key != pointKey)
+                toolbarControls.appendChild(createInputRow(key, value, 'control-row'));
         }
         toolbarControls.appendChild(createCheckRow('Animate', item['haveAnimation'], 'control-row-skip', function () {
             item['haveAnimation'] = !item['haveAnimation'];
@@ -178,6 +189,10 @@ svgWidgets = (function (svgObjects) {
         svgProps.saveButton.removeEventListener('click', saveSettings);
         svgProps.saveButton.addEventListener('click', saveSettings);
 
+        console.log(item);
+        if (item.hasOwnProperty('break')) {
+            createPointsBlock(item.props[item['break']]);
+        }
 
         setAnimationProps();
         renderAnimationProps();
@@ -186,11 +201,17 @@ svgWidgets = (function (svgObjects) {
     function saveSettings(e) {
         const item = widgetList[_selected];
         let props = {};
+
         for (let child of toolbarControls.childNodes) {
             const c = child.childNodes;
             const input = c[1].childNodes;
             if ((!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this') && input[0])
                 props[c[0].innerHTML.toLowerCase()] = input[0].value;
+        }
+        
+        const pointKey = item['break'];
+        if(pointKey){
+            props[pointKey] = savePoints();
         }
 
         item.props = props;
@@ -207,6 +228,7 @@ svgWidgets = (function (svgObjects) {
             anims[_selectedAnimation] = anim;
             item.animations = anims;
         }
+
 
         rerender();
     }
@@ -425,6 +447,66 @@ svgWidgets = (function (svgObjects) {
         animationBlocks.appendChild(chip);
 
         toolbarControls.appendChild(animationBlocks);
+    }
+
+    function createPointsBlock(value) {
+        // console.log(value);
+        pathPointBox.innerHTML = "";
+
+        if (!value || value.length == 0)
+            return;
+
+        let pointsBlocks = document.createElement('div');
+        pointsBlocks.classList.add('animation-blocks');
+
+        let points = value.split(' ');
+        for (let p of points) {
+            let chip = document.createElement('input');
+            chip.classList.add('point-chip');
+            chip.setAttribute('data-key', 'read');
+            chip.value = p;
+            // chip.addEventListener('click', function () {
+            //     saveAnimationProps(anims);
+            //     _selectedAnimation = i;
+            //     renderToolbar();
+            // });
+
+            pointsBlocks.appendChild(chip);
+        }
+
+        let chip = document.createElement('a');
+        chip.classList.add('chip');
+        chip.classList.add('add');
+        chip.innerText = '+';
+        chip.addEventListener('click', function () {
+            const item = widgetList[_selected];
+            if (item) {
+                const props = item['props'];
+                props[item['break']] = savePoints("0,0");
+                item['props'] = props;
+                console.log('props ', props);
+                widgetList[_selected] = item;
+            }
+            renderToolbar();
+        });
+        pointsBlocks.appendChild(chip);
+        pathPointBox.appendChild(pointsBlocks);
+    }
+
+    function savePoints(newValue) {
+
+        let points = '';
+        let pointList = pathPointBox.childNodes[0];
+        for (let child of pointList.childNodes) {
+            if(child.hasAttribute('data-key') && child.getAttribute('data-key') == 'read'){
+                points += child.value+' ';
+            }
+        }
+        if(newValue)
+            points += newValue;
+        console.log('points ', points.trim());
+
+        return points.trim();
     }
 
     function deleteWidget() {

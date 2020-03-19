@@ -2,7 +2,7 @@ svgObjects = (function () {
 
     circle = (function () {
 
-        getCircle = () => {
+        getShape = () => {
             return {
                 type: 'circle',
                 props: {
@@ -19,13 +19,13 @@ svgObjects = (function () {
         }
 
         return {
-            getCircle
+            getShape
         }
     })();
     
     ellipse = (function () {
 
-        getEllipse = () => {
+        getShape = () => {
             return {
                 type: 'ellipse',
                 props: {
@@ -43,13 +43,13 @@ svgObjects = (function () {
         }
 
         return {
-            getEllipse
+            getShape
         }
     })();
 
     rect = (function () {
 
-        getRect = () => {
+        getShape = () => {
             return {
                 type: 'rect',
                 props: {
@@ -67,14 +67,14 @@ svgObjects = (function () {
 
 
         return {
-            getRect
+            getShape
         }
     })();
 
     
     line = (function () {
 
-        getLine = () => {
+        getShape = () => {
             return {
                 type: 'line',
                 props: {
@@ -91,7 +91,30 @@ svgObjects = (function () {
 
 
         return {
-            getLine
+            getShape
+        }
+    })();
+    
+    
+    polygon = (function () {
+
+        getShape = () => {
+            return {
+                type: 'polygon',
+                break: 'points',
+                props: {
+                    'points': '50,10 80,90 30,61',
+                    'fill': '#dcdcdc',
+                    'stroke': '#000',
+                    'stroke-width': 2
+                },
+                animations: []
+            };
+        }
+
+
+        return {
+            getShape
         }
     })();
 
@@ -135,6 +158,7 @@ svgObjects = (function () {
         rect,
         ellipse,
         line,
+        polygon,
         animate
     }
 })();

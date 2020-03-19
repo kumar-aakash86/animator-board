@@ -43,6 +43,7 @@
                     <li><a onclick="addRect()">Rect</a></li>
                     <li><a onclick="addEllipse()">Ellipse</a></li>
                     <li><a onclick="addLine()">Line</a></li>
+                    <li><a onclick="addPolygon()">Polygon</a></li>
                 </ul>
                 <div id="widgetHeirarchyContainer">
                     <h3>Hierarchy</h3>
@@ -51,6 +52,9 @@
             </div>
             <div class="body">
                 <div class="preview-box">
+                </div>
+                <div class="path-points-box">
+                    
                 </div>
             </div>
             <div class="toolbar">
@@ -102,6 +106,9 @@
         }
         function addLine() {
             svgWidgets.addWidget('line');
+        }
+        function addPolygon() {
+            svgWidgets.addWidget('polygon');
         }
     </script>
 </body>

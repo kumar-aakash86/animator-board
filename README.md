@@ -13,6 +13,8 @@ Hope you guys will like it
 
 This is written in pure JavaScript & easy to download and run.
     
+
+#### Right now user needs to have some basic understanding of the SVG & animation to work with this tool
     
     
 

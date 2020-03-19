@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/default.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://icono-49d6.kxcdn.com/icono.min.css">
+
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 
 <body>
@@ -26,6 +28,8 @@
                 <ul class="widgetControls">
                     <li><a onclick="addCircle()">Circle</a></li>
                     <li><a onclick="addRect()">Rect</a></li>
+                    <li><a onclick="addEllipse()">Ellipse</a></li>
+                    <li><a onclick="addLine()">Line</a></li>
                 </ul>
                 <div id="widgetHeirarchyContainer">
                     <h3>Hierarchy</h3>
@@ -37,7 +41,8 @@
                 </div>
             </div>
             <div class="toolbar">
-                <h3>Properties</h3>
+                <h3>Properties <a id="deleteButton" class="icon-btn"><i class="icono-trash"></i></a> </h3>
+                <h4 id="selectedLabel"></h4>
                 <div id="toolbarControls"></div>
                 <div class="animation-control hide">
                     <h3>Animation Properties</h3>
@@ -63,7 +68,9 @@
         (function () {
             svgWidgets.init({
                 saveButton: '#saveButton',
-                exportButton: '#exportButton'
+                exportButton: '#exportButton',
+                deleteButton: '#deleteButton',
+                selectedLabel: '#selectedLabel'
             });
         })();
 
@@ -72,6 +79,12 @@
         }
         function addRect() {
             svgWidgets.addWidget('rect');
+        }
+        function addEllipse() {
+            svgWidgets.addWidget('ellipse');
+        }
+        function addLine() {
+            svgWidgets.addWidget('line');
         }
     </script>
 </body>

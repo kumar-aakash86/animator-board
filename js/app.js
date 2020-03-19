@@ -12,16 +12,23 @@ svgWidgets = (function (svgObjects) {
     let addAnimationPanel = document.querySelector('#addAnimationPanel');
     let toolbarAnimations = document.querySelector('#toolbarAnimations');
 
-    let saveButton, exportButton;
+    let saveButton, exportButton, deleteButton;
+    let selectedLabel;
 
 
     init = (props) => {
+        selectedLabel = document.querySelector(props.selectedLabel);
+        selectedLabel.style.display = 'none';
+
         saveButton = document.querySelector(props.saveButton);
         saveButton.style.display = 'none';
 
         exportButton = document.querySelector(props.exportButton);
-
         exportButton.addEventListener('click', exportSVG);
+
+        deleteButton = document.querySelector(props.deleteButton);
+        deleteButton.addEventListener('click', deleteWidget);
+        deleteButton.style.display = 'none';
 
     }
 
@@ -34,6 +41,12 @@ svgWidgets = (function (svgObjects) {
             case 'rect':
                 widget = svgObjects.rect.getRect();
                 break;
+            case 'ellipse':
+                widget = svgObjects.ellipse.getEllipse();
+                break;
+            case 'line':
+                widget = svgObjects.line.getLine();
+                break;
         }
 
         if (widget) {
@@ -45,7 +58,6 @@ svgWidgets = (function (svgObjects) {
 
 
     rerender = () => {
-        setAnimationProps();
         renderView();
         renderHierarchy();
         renderToolbar();
@@ -104,6 +116,7 @@ svgWidgets = (function (svgObjects) {
             button.addEventListener('click', function () {
                 _selected = this.getAttribute('data-index');
                 saveButton.style.display = 'block';
+                deleteButton.style.display = 'block';
                 renderToolbar();
                 renderHierarchy();
             });
@@ -114,8 +127,14 @@ svgWidgets = (function (svgObjects) {
     renderToolbar = () => {
         toolbarControls.innerHTML = "";
         const item = widgetList[_selected];
-        if (!item)
+        if (!item){
+            selectedLabel.innerHTML = "";
+            saveButton.style.display = 'none';    
+            deleteButton.style.display = 'none';    
             return;
+        }
+
+        selectedLabel.innerHTML = item.type;
 
         for (let [key, value] of Object.entries(item.props)) {
             toolbarControls.appendChild(createInputRow(key, value, 'control-row'));
@@ -123,7 +142,7 @@ svgWidgets = (function (svgObjects) {
         toolbarControls.appendChild(createCheckRow('Animate', item['haveAnimation'], 'control-row-skip', function () {
             item['haveAnimation'] = !item['haveAnimation'];
             item.animations.push({});
-            rerender();
+            renderToolbar();
         }));
 
         if (item['haveAnimation']) {
@@ -135,33 +154,36 @@ svgWidgets = (function (svgObjects) {
             animationContainer.classList.add('hide');
 
 
-        saveButton.addEventListener('click', function () {
-            const item = widgetList[_selected];
-            let props = {};
-            for (let child of toolbarControls.childNodes) {
-                let c = child.childNodes;
-                if ((!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this') && c[1])
-                    props[c[0].innerHTML.toLowerCase()] = c[1].value;
-            }
-
-            item.props = props;
-
-            const anims = item.animations;
-            let anim = {};
-            for (let child of toolbarAnimations.childNodes) {
-                let c = child.childNodes;
-                if (!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this')
-                    anim[c[1].getAttribute('data-key')] = c[1].value;
-            }
-            anims[0] = anim;
-            item.animations = anims;
-
-            // _selected = -1;
-            rerender();
-        });
+        saveButton.removeEventListener('click', saveSettings);
+        saveButton.addEventListener('click', saveSettings);
 
 
+        setAnimationProps();
         renderAnimationProps();
+    }
+
+    function saveSettings(e) {
+        const item = widgetList[_selected];
+        let props = {};
+        for (let child of toolbarControls.childNodes) {
+            let c = child.childNodes;
+            if ((!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this') && c[1])
+                props[c[0].innerHTML.toLowerCase()] = c[1].value;
+        }
+
+        item.props = props;
+
+        const anims = item.animations;
+        let anim = {};
+        for (let child of toolbarAnimations.childNodes) {
+            let c = child.childNodes;
+            if (!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this')
+                anim[c[1].getAttribute('data-key')] = c[1].value;
+        }
+        anims[_selectedAnimation] = anim;
+        item.animations = anims;
+
+        rerender();
     }
 
 
@@ -179,10 +201,10 @@ svgWidgets = (function (svgObjects) {
             </div>
         </div>`;
 
-        var wrapper = document.createElement('div');
+        const wrapper = document.createElement('div');
         wrapper.setAttribute('id', 'export-div');
         wrapper.innerHTML = html;
-        let textarea = wrapper.querySelector('#export-area');
+        const textarea = wrapper.querySelector('#export-area');
 
         // let code = document.createElement('code');
         // code.setAttribute('class', 'xml');
@@ -234,7 +256,13 @@ svgWidgets = (function (svgObjects) {
     function setAnimationProps() {
         addAnimationPanel.innerHTML = "";
 
-        const animateProps = svgObjects.animate.getAnimateProperties();
+        const item = widgetList[_selected];
+        if (!item)
+            return;
+
+        let anim = item.animations[_selectedAnimation];
+
+        const animateProps = svgObjects.animate.getAnimateProperties(anim);
 
         let animateSelect = document.createElement("select");
         animateSelect.setAttribute('id', 'animateSelect');
@@ -272,7 +300,7 @@ svgWidgets = (function (svgObjects) {
 
                     widgetList[_selected] = item;
 
-                    rerender();
+                    renderToolbar();
                 }
             }
         });
@@ -330,7 +358,7 @@ svgWidgets = (function (svgObjects) {
         childWidget.setAttribute('class', rowClass);
 
         let label = document.createElement('label');
-        label.innerHTML = key.toUpperCase();
+        label.innerHTML = key;
         if (rowClass === 'control-row-skip')
             label.setAttribute('data-key', 'skip-this');
 
@@ -349,7 +377,7 @@ svgWidgets = (function (svgObjects) {
         childWidget.setAttribute('class', rowClass);
 
         let label = document.createElement('label');
-        label.innerHTML = key.toUpperCase();
+        label.innerHTML = key;
         if (rowClass === 'control-row-skip') {
             label.setAttribute('data-key', 'skip-this');
         }
@@ -396,13 +424,25 @@ svgWidgets = (function (svgObjects) {
         chip.classList.add('add');
         chip.innerText = '+';
         chip.addEventListener('click', function () {
-            saveAnimationProps(anims);
             anims.push({});
-            rerender();
+            saveAnimationProps(anims);
+            renderToolbar();
         });
         animationBlocks.appendChild(chip);
 
         toolbarControls.appendChild(animationBlocks);
+    }
+
+    function deleteWidget(){
+        if(_selected < 0)
+            return;
+
+        let response = confirm('Are you sure you want to delete current shape ?');
+        if(response){
+            widgetList.splice(_selected, 1);
+            _selected = -1;
+            rerender();
+        }
     }
 
 

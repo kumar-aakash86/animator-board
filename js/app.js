@@ -1,5 +1,7 @@
 svgWidgets = (function (svgObjects) {
 
+
+
     let widgetList = [];
     let previewBox = document.querySelector('.preview-box');
     let codeBox = document.querySelector('.code-box');
@@ -15,21 +17,40 @@ svgWidgets = (function (svgObjects) {
     let saveButton, exportButton, deleteButton;
     let selectedLabel;
 
+    let width = 100, height = 100;
+
+    let svgProps = {
+        saveButton: null,
+        exportButton: null,
+        deleteButton: null,
+        dimensionButton: null,
+        selectedLabel: null,
+        frameWidth: null,
+        frameHeight: null,
+        viewBox: null
+        // viewBoxDimensions: {
+        //     t: 0,
+        //     l: 0,
+        //     r: 100,
+        //     b: 100
+        // }
+    }
+
 
     init = (props) => {
-        selectedLabel = document.querySelector(props.selectedLabel);
-        selectedLabel.style.display = 'none';
 
-        saveButton = document.querySelector(props.saveButton);
-        saveButton.style.display = 'none';
+        svgProps = Object.assign({}, svgProps, props);
 
-        exportButton = document.querySelector(props.exportButton);
-        exportButton.addEventListener('click', exportSVG);
+        previewBox.style.width = svgProps.frameWidth.value + 'px';
+        previewBox.style.height = svgProps.frameHeight.value + 'px';
 
-        deleteButton = document.querySelector(props.deleteButton);
-        deleteButton.addEventListener('click', deleteWidget);
-        deleteButton.style.display = 'none';
+        svgProps.saveButton.style.display = 'none';
+        svgProps.deleteButton.style.display = 'none';
+        svgProps.deleteButton.addEventListener('click', deleteWidget);
 
+        svgProps.exportButton.addEventListener('click', exportSVG);
+
+        svgProps.dimensionButton.addEventListener('click', changeDimension);
     }
 
     function addWidget(type) {
@@ -55,7 +76,11 @@ svgWidgets = (function (svgObjects) {
         }
     }
 
-
+    changeDimension = () => {        
+        previewBox.style.width = svgProps.frameWidth.value + 'px';
+        previewBox.style.height = svgProps.frameHeight.value + 'px';
+        rerender();
+    }
 
     rerender = () => {
         renderView();
@@ -67,9 +92,9 @@ svgWidgets = (function (svgObjects) {
         previewBox.innerHTML = "";
 
         let viewBox = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        viewBox.setAttribute('width', 300);
-        viewBox.setAttribute('height', 300);
-        viewBox.setAttributeNS(null, 'viewBox', '0 0 100 100');
+        viewBox.setAttribute('width', svgProps.frameWidth.value);
+        viewBox.setAttribute('height', svgProps.frameHeight.value);
+        viewBox.setAttributeNS(null, 'viewBox', svgProps.viewBox.value);
         viewBox.setAttribute('version', '1.1');
         viewBox.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
@@ -77,7 +102,6 @@ svgWidgets = (function (svgObjects) {
             let childWidget = document.createElementNS("http://www.w3.org/2000/svg", item.type);
 
             for (let [key, value] of Object.entries(item.props)) {
-                // console.log(`${key} - ${value}`);
                 childWidget.setAttribute(key, value);
             }
 
@@ -90,12 +114,9 @@ svgWidgets = (function (svgObjects) {
                     childWidget.appendChild(animWidget);
                 });
             }
-
-            viewBox.appendChild(document.createTextNode('&#13;'));
             viewBox.appendChild(childWidget);
         }
         previewBox.appendChild(viewBox);
-        // console.log(viewBox.outerHTML);
     }
 
     renderHierarchy = () => {
@@ -115,8 +136,8 @@ svgWidgets = (function (svgObjects) {
 
             button.addEventListener('click', function () {
                 _selected = this.getAttribute('data-index');
-                saveButton.style.display = 'block';
-                deleteButton.style.display = 'block';
+                svgProps.saveButton.style.display = 'block';
+                svgProps.deleteButton.style.display = 'block';
                 renderToolbar();
                 renderHierarchy();
             });
@@ -127,14 +148,14 @@ svgWidgets = (function (svgObjects) {
     renderToolbar = () => {
         toolbarControls.innerHTML = "";
         const item = widgetList[_selected];
-        if (!item){
-            selectedLabel.innerHTML = "";
-            saveButton.style.display = 'none';    
-            deleteButton.style.display = 'none';    
+        if (!item) {
+            svgProps.selectedLabel.textContent = "";
+            svgProps.saveButton.style.display = 'none';
+            svgProps.deleteButton.style.display = 'none';
             return;
         }
 
-        selectedLabel.innerHTML = item.type;
+        svgProps.selectedLabel.textContent = item.type;
 
         for (let [key, value] of Object.entries(item.props)) {
             toolbarControls.appendChild(createInputRow(key, value, 'control-row'));
@@ -154,8 +175,8 @@ svgWidgets = (function (svgObjects) {
             animationContainer.classList.add('hide');
 
 
-        saveButton.removeEventListener('click', saveSettings);
-        saveButton.addEventListener('click', saveSettings);
+        svgProps.saveButton.removeEventListener('click', saveSettings);
+        svgProps.saveButton.addEventListener('click', saveSettings);
 
 
         setAnimationProps();
@@ -166,22 +187,26 @@ svgWidgets = (function (svgObjects) {
         const item = widgetList[_selected];
         let props = {};
         for (let child of toolbarControls.childNodes) {
-            let c = child.childNodes;
-            if ((!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this') && c[1])
-                props[c[0].innerHTML.toLowerCase()] = c[1].value;
+            const c = child.childNodes;
+            const input = c[1].childNodes;
+            if ((!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this') && input[0])
+                props[c[0].innerHTML.toLowerCase()] = input[0].value;
         }
 
         item.props = props;
 
         const anims = item.animations;
-        let anim = {};
-        for (let child of toolbarAnimations.childNodes) {
-            let c = child.childNodes;
-            if (!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this')
-                anim[c[1].getAttribute('data-key')] = c[1].value;
+        if (anims.length > 0) {
+            let anim = {};
+            for (let child of toolbarAnimations.childNodes) {
+                const c = child.childNodes;
+                const input = c[1].childNodes;
+                if (!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this')
+                    anim[input[0].getAttribute('data-key')] = input[0].value;
+            }
+            anims[_selectedAnimation] = anim;
+            item.animations = anims;
         }
-        anims[_selectedAnimation] = anim;
-        item.animations = anims;
 
         rerender();
     }
@@ -206,38 +231,12 @@ svgWidgets = (function (svgObjects) {
         wrapper.innerHTML = html;
         const textarea = wrapper.querySelector('#export-area');
 
-        // let code = document.createElement('code');
-        // code.setAttribute('class', 'xml');
-        // textarea.appendChild(code);
-        // // code.textContent = previewBox.innerHTML.replace('--new--', '&#13;');
-        // c = "<pre><code class='code'>" + previewBox.innerHTML + "</code></pre>";
         textarea.textContent = previewBox.innerHTML;
-        // content = previewBox.innerHTML.replace(/^\s+|\s*(<br *\/?>)?\s*$/g,"")
-        // lines = content.split(/\s*<br ?\/?>\s*/);
-        // console.log(lines);
-
-        // textarea.innerHTML = htmlEntities(previewBox.innerHTML);
-
-        // var w = document.createElement('div');
-        // w.innerHTML = previewBox.innerHTML;
-        // textarea.textContent = w.innerHTML.replace('--new--', '&#13;');
-
-        // console.log(convert(previewBox));
 
         wrapper.querySelector('#closeButton').addEventListener('click', closeExportBox);
 
         if (document.body != null)
             document.body.appendChild(wrapper);
-
-        // hljs.configure({ useBR: true });
-
-        // document.querySelectorAll('div#export-area').forEach((block) => {
-        //     hljs.highlightBlock(block);
-        // });
-
-        // document.querySelectorAll('pre code').forEach((block) => {
-        //     hljs.highlightBlock(block);
-        // });
     }
 
     function htmlEntities(str) {
@@ -249,9 +248,6 @@ svgWidgets = (function (svgObjects) {
         if (exportDiv)
             exportDiv.remove();
     }
-
-
-
 
     function setAnimationProps() {
         addAnimationPanel.innerHTML = "";
@@ -282,17 +278,9 @@ svgWidgets = (function (svgObjects) {
         addAnimationPanel.appendChild(addAnimatebutton);
 
         addAnimatebutton.addEventListener('click', function () {
-            // console.log();
             const item = widgetList[_selected];
             if (item) {
                 const anims = item.animations;
-
-                // let props = {};
-                // for (let child of toolbarAnimations.childNodes) {
-                //     let c = child.childNodes;
-                //     props[c[1].getAttribute('data-key')] = c[1].value;
-                // }
-                // anims[_selectedAnimation] = props;
                 saveAnimationProps(anims);
 
                 if (anims) {
@@ -307,13 +295,16 @@ svgWidgets = (function (svgObjects) {
     }
 
     function saveAnimationProps(anims) {
-
-        let props = {};
-        for (let child of toolbarAnimations.childNodes) {
-            let c = child.childNodes;
-            props[c[1].getAttribute('data-key')] = c[1].value;
-        }
-        anims[_selectedAnimation] = props;
+        return new Promise((resolve, reject) => {
+            let props = {};
+            for (let child of toolbarAnimations.childNodes) {
+                const c = child.childNodes;
+                const input = c[1].childNodes;
+                props[input[0].getAttribute('data-key')] = input[0].value;
+            }
+            anims[_selectedAnimation] = props;
+            resolve();
+        });
     }
 
     function renderAnimationProps() {
@@ -327,23 +318,12 @@ svgWidgets = (function (svgObjects) {
                 let anim = anims[_selectedAnimation];
                 if (anim)
                     for (let [key, value] of Object.entries(anim)) {
-                        // let childWidget = document.createElement('div');
-                        // childWidget.setAttribute('class', 'animation-row');
-
-                        // let label = document.createElement('label');
-                        // label.innerHTML = key.toUpperCase();
-
-                        // let input = document.createElement('input');
-                        // input.value = value;
-                        // input.setAttribute('data-key', key);
-                        // // input.addEventListener('change', function(){
-                        // //     ListeningStateChangedEvent();return
-                        // // });
-
-                        // childWidget.appendChild(label);
-                        // childWidget.appendChild(input);
-
-                        toolbarAnimations.appendChild(createInputRow(key, value, 'animation-row'));
+                        toolbarAnimations.appendChild(createInputRow(key, value, 'animation-row', async function (e) {
+                            await saveAnimationProps(anims);
+                            const key = e.target.getAttribute('data-key');
+                            anims[_selectedAnimation] = svgObjects.animate.removeProp(key, anims[_selectedAnimation]);
+                            renderToolbar();
+                        }));
 
                     }
                 // })
@@ -352,7 +332,7 @@ svgWidgets = (function (svgObjects) {
 
     }
 
-    function createInputRow(key, value, rowClass) {
+    function createInputRow(key, value, rowClass, removeCallback) {
 
         let childWidget = document.createElement('div');
         childWidget.setAttribute('class', rowClass);
@@ -362,12 +342,26 @@ svgWidgets = (function (svgObjects) {
         if (rowClass === 'control-row-skip')
             label.setAttribute('data-key', 'skip-this');
 
+
+        let inputContainer = document.createElement('div');
         let input = document.createElement('input');
         input.value = value;
         input.setAttribute('data-key', key);
+        inputContainer.appendChild(input);
+
+        if (removeCallback) {
+            let removeButton = document.createElement('a');
+            removeButton.classList.add('icono-crossCircle');
+            removeButton.classList.add('icon-btn');
+            removeButton.classList.add('remove-btn');
+            removeButton.setAttribute('data-key', key);
+            inputContainer.appendChild(removeButton);
+            removeButton.addEventListener('click', removeCallback)
+        }
+
 
         childWidget.appendChild(label);
-        childWidget.appendChild(input);
+        childWidget.appendChild(inputContainer);
         return childWidget;
     }
 
@@ -433,12 +427,12 @@ svgWidgets = (function (svgObjects) {
         toolbarControls.appendChild(animationBlocks);
     }
 
-    function deleteWidget(){
-        if(_selected < 0)
+    function deleteWidget() {
+        if (_selected < 0)
             return;
 
         let response = confirm('Are you sure you want to delete current shape ?');
-        if(response){
+        if (response) {
             widgetList.splice(_selected, 1);
             _selected = -1;
             rerender();

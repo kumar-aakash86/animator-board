@@ -4,6 +4,9 @@ html, body{
     font-family: Arial, Helvetica, sans-serif;
 }
 
+.red{
+    color: red;
+}
 
 input[type=button]{
     
@@ -16,7 +19,7 @@ a{
     cursor: pointer;
     text-decoration: none;
 }
-a.icon-btn i{
+a.icon-btn i, a.icon-btn[class^='icono']{
     transform: scale(0.6,0.6);
     color: red;
 }
@@ -43,6 +46,8 @@ pre {
     display: flex;
     flex-direction: column;
 }
+
+/* HEADER */
 #header{
     height: 50px;
     background-color: blueviolet;
@@ -51,7 +56,23 @@ pre {
 }
 #header .middle{
     flex: 1;
+    border-left: solid 1px #fff;
 }
+#header .middle .dimensions{
+    display: flex;
+    flex-wrap: nowrap;
+    padding: 10px;
+    color: #fff;
+}
+#header .middle .dimensions > label{
+    padding: 0 10px;
+} 
+#header .middle .dimensions > input[type=number]{
+    width: 50px;
+} 
+#header .middle .dimensions > input[type=text]{
+    width: 100px;
+} 
 
 #header .logo{
     align-self: start;
@@ -69,6 +90,7 @@ pre {
     height: 100%;
     padding: 0 20px;
 }
+/* HEADER */
 
 #wrapper{
     flex: 1;
@@ -81,13 +103,18 @@ pre {
     flex: 3;
     /* height: 100vh; */
     background-color: #000;
+    position: relative;
 }
 
 .body .preview-box{
-    height: 80%;
+    max-height: 80% !important;
     display: block;
-    width: 80%;
-    margin: 10%;
+    max-width: 80% !important;
+    /* margin: 10%; */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #fff;
 }
 
@@ -160,6 +187,7 @@ ul.widgetControls li a:hover{
     color: darkslateblue;
     text-decoration: underline;
     text-transform: capitalize;
+    margin: 5px 0;
 }
 
 .toolbar #toolbarControls{
@@ -259,6 +287,10 @@ ul.widgetControls li a:hover{
      font-size: 20px;
      text-align: center;
      width: 25px;
+ }
+
+ #toolbarAnimations .remove-btn{
+    transform: scale(0.6,0.6) rotate(45deg);
  }
 /* ANIMATION */
 

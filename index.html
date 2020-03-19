@@ -18,7 +18,20 @@
     <div id="container">
         <div id="header">
             <div class="logo">SVG Generator</div>
-            <div class="middle"></div>
+            <div class="middle">
+                <div class="dimensions">
+                    <label for="">Width</label>
+                    <input type="number" name="" id="frameWidth" value="200">
+                    &nbsp;&nbsp;|&nbsp;&nbsp;                    
+                    <label for="">Height</label>
+                    <input type="number" name="" id="frameHeight"  value="200">
+                    &nbsp;&nbsp;|&nbsp;&nbsp;                  
+                    <label for="">ViewBox</label>
+                    <input type="text" name="" id="viewBox"  value="0 0 100 100">
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <input type="button" value="SET DIMENSION" id="dimensionButton">
+                </div>
+            </div>
             <div class="export">
                 <input type="button" value="EXPORT" id="exportButton">
             </div>
@@ -67,10 +80,14 @@
 
         (function () {
             svgWidgets.init({
-                saveButton: '#saveButton',
-                exportButton: '#exportButton',
-                deleteButton: '#deleteButton',
-                selectedLabel: '#selectedLabel'
+                saveButton: document.querySelector('#saveButton'),
+                exportButton: document.querySelector('#exportButton'),
+                deleteButton: document.querySelector('#deleteButton'),
+                dimensionButton: document.querySelector('#dimensionButton'),
+                selectedLabel: document.querySelector('#selectedLabel'),
+                frameWidth: document.querySelector('#frameWidth'),
+                frameHeight: document.querySelector('#frameHeight'),
+                viewBox: document.querySelector('#viewBox'),
             });
         })();
 

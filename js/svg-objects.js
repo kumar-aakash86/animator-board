@@ -111,13 +111,22 @@ svgObjects = (function () {
             if(!obj)
                 obj = {};
             // animateProps = animateProps.filter((item) => item != name);
+
+            if(name == null)
+                return obj;
              obj[name] = '';
              return obj;
         }
 
+        removeProp = (name, obj) => {
+            delete obj[name];
+            return obj;
+        }
+
         return {
             getAnimateProperties,
-            addProp
+            addProp,
+            removeProp
         }
     })();
 

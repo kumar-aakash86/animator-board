@@ -9,10 +9,15 @@ html, body{
 }
 
 input[type=button]{
-    
+    font-weight: bold;
     color: #fff;
-    background-color: dodgerblue;
+    background-color: cadetblue;
     border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+input[type=button].border{
+    border: solid 2px #fff;
 }
 
 a{
@@ -65,7 +70,7 @@ pre {
     color: #fff;
 }
 #header .middle .dimensions > label{
-    padding: 0 10px;
+    padding: 5px 10px;
 } 
 #header .middle .dimensions > input[type=number]{
     width: 50px;
@@ -202,6 +207,7 @@ ul.widgetControls li a:hover{
 .toolbar .control-row, .toolbar .control-row-skip{
     flex-direction: row;
     display: flex;
+    padding-bottom: 5px;
 }
 .toolbar .control-row label,
 .toolbar .control-row-skip label{ 
@@ -340,7 +346,7 @@ ul.widgetControls li a:hover{
 }
 .export-code-body{
     flex: 1;
-    padding: 5%;
+    padding: 0 2% 5% 2%;
 }
 .export-code-body #export-area{
     width: 100%;

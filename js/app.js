@@ -517,6 +517,7 @@ svgWidgets = (function (svgObjects) {
         if (response) {
             widgetList.splice(_selected, 1);
             _selected = -1;
+            createPointsBlock();
             rerender();
         }
     }

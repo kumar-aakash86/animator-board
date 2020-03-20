@@ -25,7 +25,7 @@ Using following libraries in this project
 
 ## Authors
 
-* **Aakash Kumar** - *Initial work* - [Gthub](https://github.com/kumar-aakash86)
+* **Aakash Kumar** - *Initial work* - [Github](https://github.com/kumar-aakash86)
 
 ## License
 

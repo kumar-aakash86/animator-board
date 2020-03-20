@@ -110,7 +110,7 @@ svgWidgets = (function (svgObjects) {
                 childWidget.setAttribute(key, value);
             }
 
-            if (item.animations && item.animations.length > 0) {
+            if (item['haveAnimation'] && item.animations && item.animations.length > 0) {
                 item.animations.forEach((anim) => {
                     let animWidget = document.createElementNS("http://www.w3.org/2000/svg", 'animate');
                     for (let [key, value] of Object.entries(anim)) {
@@ -175,7 +175,7 @@ svgWidgets = (function (svgObjects) {
         toolbarControls.appendChild(createCheckRow('Animate', item['haveAnimation'], 'control-row-skip', function () {
             item['haveAnimation'] = !item['haveAnimation'];
             // item.animations.push({});
-            renderToolbar();
+            rerender();
         }));
 
 

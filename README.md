@@ -18,9 +18,9 @@ This is written in pure JavaScript & easy to download and run.
 
     
 
-Using following libraries in this project 
+Working Site
 ----
-[WORKING SITE](https://kumar-aakash86.github.io/animator-board/)
+[AK Animator](https://kumar-aakash86.github.io/animator-board/)
 
 
 ## Authors

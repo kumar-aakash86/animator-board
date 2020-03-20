@@ -15,9 +15,6 @@ svgWidgets = (function (svgObjects) {
     let toolbarAnimations = document.querySelector('#toolbarAnimations');
     let pathPointBox = document.querySelector('.path-points-box');
 
-    // let saveButton, exportButton, deleteButton;
-    // let selectedLabel;
-
     let width = 100, height = 100;
 
     let svgProps = {
@@ -30,14 +27,7 @@ svgWidgets = (function (svgObjects) {
         frameWidth: null,
         frameHeight: null,
         viewBox: null
-        // viewBoxDimensions: {
-        //     t: 0,
-        //     l: 0,
-        //     r: 100,
-        //     b: 100
-        // }
     }
-
 
     init = (props) => {
 
@@ -149,7 +139,6 @@ svgWidgets = (function (svgObjects) {
         }
     }
 
-
     renderToolbar = () => {
         toolbarControls.innerHTML = "";
         const item = widgetList[_selected];
@@ -172,12 +161,12 @@ svgWidgets = (function (svgObjects) {
             if (key != pointKey)
                 toolbarControls.appendChild(createInputRow(key, value, 'control-row'));
         }
+
         toolbarControls.appendChild(createCheckRow('Animate', item['haveAnimation'], 'control-row-skip', function () {
             item['haveAnimation'] = !item['haveAnimation'];
             // item.animations.push({});
             rerender();
         }));
-
 
         svgProps.saveButton.removeEventListener('click', saveSettings);
         svgProps.saveButton.addEventListener('click', saveSettings);
@@ -185,7 +174,6 @@ svgWidgets = (function (svgObjects) {
         if (item.hasOwnProperty('break')) {
             createPointsBlock(item.props[item['break']]);
         }
-
 
         if (item['haveAnimation']) {
 
@@ -199,7 +187,6 @@ svgWidgets = (function (svgObjects) {
         }
         else
             animationContainer.classList.add('hide');
-
     }
 
     function saveSettings(e) {
@@ -233,14 +220,11 @@ svgWidgets = (function (svgObjects) {
             item.animations = anims;
         }
 
-
         rerender();
     }
 
 
     function exportSVG() {
-
-
         let html = `<div class="cover"></div>
         <div class="code-box">
             <div class="export-box-header">
@@ -318,8 +302,6 @@ svgWidgets = (function (svgObjects) {
         svgProps.deleteAnimationButton.addEventListener('click', deleteAnimation);
     }
 
-
-
     function saveAnimationProps(anims) {
         return new Promise((resolve, reject) => {
             let props = {};
@@ -363,7 +345,6 @@ svgWidgets = (function (svgObjects) {
         if (rowClass === 'control-row-skip')
             label.setAttribute('data-key', 'skip-this');
 
-
         let inputContainer = document.createElement('div');
         let input = document.createElement('input');
         input.value = value;
@@ -379,7 +360,6 @@ svgWidgets = (function (svgObjects) {
             inputContainer.appendChild(removeButton);
             removeButton.addEventListener('click', removeCallback)
         }
-
 
         childWidget.appendChild(label);
         childWidget.appendChild(inputContainer);
@@ -431,7 +411,6 @@ svgWidgets = (function (svgObjects) {
             animationBlocks.appendChild(chip);
         }
 
-
         let chip = document.createElement('a');
         chip.classList.add('chip');
         chip.classList.add('add');
@@ -447,7 +426,6 @@ svgWidgets = (function (svgObjects) {
     }
 
     function createPointsBlock(value) {
-        // console.log(value);
         pathPointBox.innerHTML = "";
 
         if (!value || value.length == 0)
@@ -462,11 +440,6 @@ svgWidgets = (function (svgObjects) {
             chip.classList.add('point-chip');
             chip.setAttribute('data-key', 'read');
             chip.value = p;
-            // chip.addEventListener('click', function () {
-            //     saveAnimationProps(anims);
-            //     _selectedAnimation = i;
-            //     renderToolbar();
-            // });
 
             pointsBlocks.appendChild(chip);
         }
@@ -481,7 +454,6 @@ svgWidgets = (function (svgObjects) {
                 const props = item['props'];
                 props[item['break']] = savePoints("0,0");
                 item['props'] = props;
-                console.log('props ', props);
                 widgetList[_selected] = item;
             }
             renderToolbar();
@@ -491,7 +463,6 @@ svgWidgets = (function (svgObjects) {
     }
 
     function savePoints(newValue) {
-
         let points = '';
         let pointList = pathPointBox.childNodes[0];
         for (let child of pointList.childNodes) {
@@ -501,7 +472,6 @@ svgWidgets = (function (svgObjects) {
         }
         if (newValue)
             points += newValue;
-        console.log('points ', points.trim());
 
         return points.trim();
     }
@@ -530,12 +500,9 @@ svgWidgets = (function (svgObjects) {
                     anims.splice(_selectedAnimation, 1);
                 }
             }
-            console.log(item);
-
             rerender();
         }
     }
-
 
     return {
         addWidget,

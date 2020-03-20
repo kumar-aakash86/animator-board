@@ -21,3 +21,12 @@ This is written in pure JavaScript & easy to download and run.
 Using following libraries in this project 
 ----
 [WORKING SITE](https://kumar-aakash86.github.io/animator-board/)
+
+
+## Authors
+
+* **Aakash Kumar** - *Initial work* - [Gthub](https://github.com/kumar-aakash86)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

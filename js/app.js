@@ -318,20 +318,18 @@ svgWidgets = (function (svgObjects) {
     function renderAnimationProps(anims) {
         toolbarAnimations.innerHTML = "";
 
-        if (anims) {
-            // anims.forEach((anim, index) => {     
+        if (anims) {  
             let anim = anims[_selectedAnimation];
             if (anim)
                 for (let [key, value] of Object.entries(anim)) {
                     toolbarAnimations.appendChild(createInputRow(key, value, 'animation-row', async function (e) {
                         await saveAnimationProps(anims);
-                        const key = e.target.getAttribute('data-key');
+                        const key = e.currentTarget.getAttribute('data-key');
                         anims[_selectedAnimation] = svgObjects.animate.removeProp(key, anims[_selectedAnimation]);
                         renderToolbar();
                     }));
 
                 }
-            // })
         }
     }
 
@@ -353,12 +351,16 @@ svgWidgets = (function (svgObjects) {
 
         if (removeCallback) {
             let removeButton = document.createElement('a');
-            removeButton.classList.add('icono-crossCircle');
-            removeButton.classList.add('icon-btn');
+            let buttonBody = `<div class="glyph fs1">
+                <div class="clearfix pbs">
+                    <svg class="icon icon-cancel-circle"><use xlink:href="styles/symbol-defs.svg#icon-cancel-circle"></use></svg>
+                </div>
+            </div>`;
             removeButton.classList.add('remove-btn');
             removeButton.setAttribute('data-key', key);
+            removeButton.innerHTML = buttonBody;
+            removeButton.addEventListener('click', removeCallback);
             inputContainer.appendChild(removeButton);
-            removeButton.addEventListener('click', removeCallback)
         }
 
         childWidget.appendChild(label);

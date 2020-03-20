@@ -416,8 +416,11 @@ ul.widgetControls li a:hover {
     width: 30px;
 }
 
-#toolbarAnimations .remove-btn {
-    transform: scale(0.6, 0.6) rotate(45deg);
+/* #toolbarAnimations .remove-btn {
+    color: red;
+} */
+#toolbarAnimations .remove-btn svg{
+    color: red;
 }
 
 /* ANIMATION */

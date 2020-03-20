@@ -54,11 +54,21 @@
                 </div>
             </div>
             <div class="toolbar">
-                <h3>Properties <a id="deleteButton" class="icon-btn"><i class="icono-trash"></i></a> </h3>
+                <h3>Properties <a id="deleteButton" class="icon-btn red-button">
+                    <div class="glyph fs1">
+                        <div class="clearfix pbs">
+                            <svg class="icon icon-bin"><use xlink:href="styles/symbol-defs.svg#icon-bin"></use></svg>
+                        </div>
+                    </div></a> </h3>
                 <h4 id="selectedLabel"></h4>
                 <div id="toolbarControls"></div>
                 <div class="animation-control hide">
-                    <h3>Animation Properties</h3>
+                    <h3>Animation
+                        <a id="deleteAnimationButton" class="icon-btn red-button fr">
+                            <div class="glyph fs1">
+                                    <svg class="icon icon-bin"><use xlink:href="styles/symbol-defs.svg#icon-bin"></use></svg>
+                        </div></a>
+                    </h3>
                     <div id="addAnimationPanel">
                     </div>
                     <div id="toolbarAnimations"></div>
@@ -67,6 +77,17 @@
                     <input type="button" value="APPLY CHANGES" id="saveButton" />
                 </div>
             </div>
+        </div>
+        <div class="footer">
+            <span>Created by&nbsp;&nbsp;<a href="https://github.com/kumar-aakash86" target="_blank">Aakash Kumar</a></span>
+            &nbsp;&nbsp;<span>|</span>&nbsp;&nbsp;
+            <span>
+                <div class="glyph fs1">
+                    <div class="clearfix pbs">
+                        <svg class="icon icon-github"><use xlink:href="styles/symbol-defs.svg#icon-github"></use></svg>
+                    </div>
+                </div>
+                <a href="https://github.com/kumar-aakash86/animator-board" target="_blank">Source Code</a></span>
         </div>
     </div>
 
@@ -83,6 +104,7 @@
                 saveButton: document.querySelector('#saveButton'),
                 exportButton: document.querySelector('#exportButton'),
                 deleteButton: document.querySelector('#deleteButton'),
+                deleteAnimationButton: document.querySelector('#deleteAnimationButton'),
                 dimensionButton: document.querySelector('#dimensionButton'),
                 selectedLabel: document.querySelector('#selectedLabel'),
                 frameWidth: document.querySelector('#frameWidth'),

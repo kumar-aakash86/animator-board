@@ -15,8 +15,8 @@ svgWidgets = (function (svgObjects) {
     let toolbarAnimations = document.querySelector('#toolbarAnimations');
     let pathPointBox = document.querySelector('.path-points-box');
 
-    let saveButton, exportButton, deleteButton;
-    let selectedLabel;
+    // let saveButton, exportButton, deleteButton;
+    // let selectedLabel;
 
     let width = 100, height = 100;
 
@@ -24,6 +24,7 @@ svgWidgets = (function (svgObjects) {
         saveButton: null,
         exportButton: null,
         deleteButton: null,
+        deleteAnimationButton: null,
         dimensionButton: null,
         selectedLabel: null,
         frameWidth: null,
@@ -45,8 +46,8 @@ svgWidgets = (function (svgObjects) {
         previewBox.style.width = svgProps.frameWidth.value + 'px';
         previewBox.style.height = svgProps.frameHeight.value + 'px';
 
-        svgProps.saveButton.style.display = 'none';
-        svgProps.deleteButton.style.display = 'none';
+        svgProps.saveButton.style.visibility = 'hidden';
+        svgProps.deleteButton.style.visibility = 'hidden';
         svgProps.deleteButton.addEventListener('click', deleteWidget);
 
         svgProps.exportButton.addEventListener('click', exportSVG);
@@ -140,8 +141,8 @@ svgWidgets = (function (svgObjects) {
 
             button.addEventListener('click', function () {
                 _selected = this.getAttribute('data-index');
-                svgProps.saveButton.style.display = 'block';
-                svgProps.deleteButton.style.display = 'block';
+                svgProps.saveButton.style.visibility = 'visible';
+                svgProps.deleteButton.style.visibility = 'visible';
                 renderToolbar();
                 renderHierarchy();
             });
@@ -154,48 +155,51 @@ svgWidgets = (function (svgObjects) {
         const item = widgetList[_selected];
         if (!item) {
             svgProps.selectedLabel.textContent = "";
-            svgProps.saveButton.style.display = 'none';
-            svgProps.deleteButton.style.display = 'none';
+            svgProps.saveButton.style.visibility = 'hidden';
+            svgProps.deleteButton.style.visibility = 'hidden';
             return;
         }
 
         svgProps.selectedLabel.textContent = item.type;
-        
+
         const pointKey = item['break'];
-        if(pointKey)
-            pathPointBox.style.display = 'block';
+        if (pointKey)
+            pathPointBox.style.visibility = 'visible';
         else
-            pathPointBox.style.display = 'none';
+            pathPointBox.style.visibility = 'hidden';
 
         for (let [key, value] of Object.entries(item.props)) {
-            if(key != pointKey)
+            if (key != pointKey)
                 toolbarControls.appendChild(createInputRow(key, value, 'control-row'));
         }
         toolbarControls.appendChild(createCheckRow('Animate', item['haveAnimation'], 'control-row-skip', function () {
             item['haveAnimation'] = !item['haveAnimation'];
-            item.animations.push({});
+            // item.animations.push({});
             renderToolbar();
         }));
-
-        if (item['haveAnimation']) {
-            animationContainer.classList.remove('hide');
-
-            createAnimationBlock(item.animations);
-        }
-        else
-            animationContainer.classList.add('hide');
 
 
         svgProps.saveButton.removeEventListener('click', saveSettings);
         svgProps.saveButton.addEventListener('click', saveSettings);
 
-        console.log(item);
         if (item.hasOwnProperty('break')) {
             createPointsBlock(item.props[item['break']]);
         }
 
-        setAnimationProps();
-        renderAnimationProps();
+
+        if (item['haveAnimation']) {
+
+            createAnimationBlock(item.animations);
+
+            if(item.animations.length > 0){
+                animationContainer.classList.remove('hide');
+                setAnimationProps(item);
+                renderAnimationProps(item.animations);
+            }
+        }
+        else
+            animationContainer.classList.add('hide');
+
     }
 
     function saveSettings(e) {
@@ -208,9 +212,9 @@ svgWidgets = (function (svgObjects) {
             if ((!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this') && input[0])
                 props[c[0].innerHTML.toLowerCase()] = input[0].value;
         }
-        
+
         const pointKey = item['break'];
-        if(pointKey){
+        if (pointKey) {
             props[pointKey] = savePoints();
         }
 
@@ -271,12 +275,8 @@ svgWidgets = (function (svgObjects) {
             exportDiv.remove();
     }
 
-    function setAnimationProps() {
+    function setAnimationProps(item) {
         addAnimationPanel.innerHTML = "";
-
-        const item = widgetList[_selected];
-        if (!item)
-            return;
 
         let anim = item.animations[_selectedAnimation];
 
@@ -300,7 +300,6 @@ svgWidgets = (function (svgObjects) {
         addAnimationPanel.appendChild(addAnimatebutton);
 
         addAnimatebutton.addEventListener('click', function () {
-            const item = widgetList[_selected];
             if (item) {
                 const anims = item.animations;
                 saveAnimationProps(anims);
@@ -314,7 +313,12 @@ svgWidgets = (function (svgObjects) {
                 }
             }
         });
+
+        svgProps.deleteAnimationButton.removeEventListener('click', deleteAnimation);
+        svgProps.deleteAnimationButton.addEventListener('click', deleteAnimation);
     }
+
+
 
     function saveAnimationProps(anims) {
         return new Promise((resolve, reject) => {
@@ -329,29 +333,24 @@ svgWidgets = (function (svgObjects) {
         });
     }
 
-    function renderAnimationProps() {
+    function renderAnimationProps(anims) {
         toolbarAnimations.innerHTML = "";
 
-        const item = widgetList[_selected];
-        if (item) {
-            const anims = item.animations;
-            if (anims) {
-                // anims.forEach((anim, index) => {     
-                let anim = anims[_selectedAnimation];
-                if (anim)
-                    for (let [key, value] of Object.entries(anim)) {
-                        toolbarAnimations.appendChild(createInputRow(key, value, 'animation-row', async function (e) {
-                            await saveAnimationProps(anims);
-                            const key = e.target.getAttribute('data-key');
-                            anims[_selectedAnimation] = svgObjects.animate.removeProp(key, anims[_selectedAnimation]);
-                            renderToolbar();
-                        }));
+        if (anims) {
+            // anims.forEach((anim, index) => {     
+            let anim = anims[_selectedAnimation];
+            if (anim)
+                for (let [key, value] of Object.entries(anim)) {
+                    toolbarAnimations.appendChild(createInputRow(key, value, 'animation-row', async function (e) {
+                        await saveAnimationProps(anims);
+                        const key = e.target.getAttribute('data-key');
+                        anims[_selectedAnimation] = svgObjects.animate.removeProp(key, anims[_selectedAnimation]);
+                        renderToolbar();
+                    }));
 
-                    }
-                // })
-            }
+                }
+            // })
         }
-
     }
 
     function createInputRow(key, value, rowClass, removeCallback) {
@@ -402,6 +401,7 @@ svgWidgets = (function (svgObjects) {
         input.checked = value;
         input.setAttribute('data-key', key);
         input.setAttribute('type', 'checkbox');
+        input.removeEventListener('change', callback);
         input.addEventListener('change', callback);
 
         childWidget.appendChild(label);
@@ -410,9 +410,6 @@ svgWidgets = (function (svgObjects) {
     }
 
     function createAnimationBlock(anims) {
-
-        if (anims.length == 0)
-            return;
 
         let animationBlocks = document.createElement('div');
         animationBlocks.classList.add('animation-blocks');
@@ -498,11 +495,11 @@ svgWidgets = (function (svgObjects) {
         let points = '';
         let pointList = pathPointBox.childNodes[0];
         for (let child of pointList.childNodes) {
-            if(child.hasAttribute('data-key') && child.getAttribute('data-key') == 'read'){
-                points += child.value+' ';
+            if (child.hasAttribute('data-key') && child.getAttribute('data-key') == 'read') {
+                points += child.value + ' ';
             }
         }
-        if(newValue)
+        if (newValue)
             points += newValue;
         console.log('points ', points.trim());
 
@@ -518,6 +515,23 @@ svgWidgets = (function (svgObjects) {
             widgetList.splice(_selected, 1);
             _selected = -1;
             createPointsBlock();
+            rerender();
+        }
+    }
+
+    function deleteAnimation() {
+        let response = confirm('Are you sure, you want to delete this animation ?');
+
+        if (response) {
+            let item = widgetList[_selected];
+            if (item) {
+                let anims = item.animations;
+                if (anims) {
+                    anims.splice(_selectedAnimation, 1);
+                }
+            }
+            console.log(item);
+
             rerender();
         }
     }

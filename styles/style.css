@@ -1,14 +1,40 @@
-html, body{
+:root {
+    --app-bg-color: blueviolet;
+}
+
+html, body {
     padding: 0;
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.red{
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.red {
     color: red;
 }
 
-input[type=button]{
+
+.red-button {
+    background-color: red;
+    border-radius: 5px;
+}
+.clearfix:before, .clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+input[type=button] {
     font-weight: bold;
     color: #fff;
     background-color: cadetblue;
@@ -16,70 +42,111 @@ input[type=button]{
     padding: 5px 10px;
     cursor: pointer;
 }
-input[type=button].border{
+
+input[type=button].border {
     border: solid 2px #fff;
 }
 
-a{
+a {
     cursor: pointer;
     text-decoration: none;
 }
-a.icon-btn i, a.icon-btn[class^='icono']{
-    transform: scale(0.6,0.6);
+
+a.icon-btn i, a.icon-btn[class^='icono'] {
+    transform: scale(0.6, 0.6);
     color: red;
 }
 
-.hide{
+.hide {
     display: none;
 }
 
-.show{
+.show {
     display: block;
 }
 
 pre {
-    white-space: pre-wrap;       /* css-3 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
-   }
-   
-#container{
+    white-space: pre-wrap;
+    /* css-3 */
+    white-space: -moz-pre-wrap;
+    /* Mozilla, since 1999 */
+    white-space: -pre-wrap;
+    /* Opera 4-6 */
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    word-wrap: break-word;
+    /* Internet Explorer 5.5+ */
+}
+
+#container {
     width: 100%;
     height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
+.fs0 {
+    font-size: 16px;
+}
+
+.fs1 {
+    font-size: 32px;
+}
+
+.icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
+}
+
+.glyph {
+    display: inline-block;
+    font-size: 16px;
+    width: 1em;
+    padding: .2em .5em;
+}
+
+svg {
+    color: #fff;
+}
+
 /* HEADER */
-#header{
+
+#header {
     height: 50px;
-    background-color: blueviolet;
+    background-color: var(--app-bg-color);
     display: flex;
     flex-direction: row;
 }
-#header .middle{
+
+#header .middle {
     flex: 1;
     border-left: solid 1px #fff;
 }
-#header .middle .dimensions{
+
+#header .middle .dimensions {
     display: flex;
     flex-wrap: nowrap;
     padding: 10px;
     color: #fff;
 }
-#header .middle .dimensions > label{
-    padding: 5px 10px;
-} 
-#header .middle .dimensions > input[type=number]{
-    width: 50px;
-} 
-#header .middle .dimensions > input[type=text]{
-    width: 100px;
-} 
 
-#header .logo{
+#header .middle .dimensions>label {
+    padding: 5px 10px;
+}
+
+#header .middle .dimensions>input[type=number] {
+    width: 50px;
+}
+
+#header .middle .dimensions>input[type=text] {
+    width: 100px;
+}
+
+#header .logo {
     align-self: start;
     display: block;
     padding: 15px;
@@ -87,24 +154,49 @@ pre {
     color: #fff;
 }
 
-#header .export{
+#header .export {
     align-self: flex-end;
     height: 100%;
 }
-#header .export input[type=button]{
+
+#header .export input[type=button] {
     height: 100%;
     padding: 0 20px;
 }
+
 /* HEADER */
 
-#wrapper{
+/* FOOTER */
+
+.footer {
+    height: 50px;
+    background-color: var(--app-bg-color, pink);
+    display: flex;
+    justify-content: center;
+}
+
+.footer span {
+    color: #fff;
+    align-self: center;
+    display: flex;
+}
+
+.footer span a {
+    color: orange;
+    text-decoration: underline;
+    align-self: center;
+}
+
+/* FOOTER */
+
+#wrapper {
     flex: 1;
     width: 100%;
     /* height: 100vh; */
     display: flex;
 }
 
-.body{
+.body {
     flex: 3;
     /* height: 100vh; */
     background-color: #000;
@@ -113,7 +205,7 @@ pre {
     flex-direction: column;
 }
 
-.body .preview-box{
+.body .preview-box {
     max-height: 80% !important;
     display: block;
     max-width: 80% !important;
@@ -126,7 +218,8 @@ pre {
 }
 
 /* WIDGETS */
-.widgets{
+
+.widgets {
     flex: 1;
     /* height: 100vh; */
     display: flex;
@@ -134,7 +227,7 @@ pre {
     border-right: solid 1px #000;
 }
 
-.widgets ul.widgetControls{
+.widgets ul.widgetControls {
     flex: 1;
     list-style-type: none;
     padding: 20px;
@@ -142,57 +235,63 @@ pre {
     border-bottom: solid 1px #000;
 }
 
-ul.widgetControls li{
-    width: 100%;;
+ul.widgetControls li {
+    width: 100%;
+    ;
 }
-ul.widgetControls li a{
+
+ul.widgetControls li a {
     font-size: 20px;
     display: block;
     padding: 10px;
 }
-ul.widgetControls li a:hover{
+
+ul.widgetControls li a:hover {
     background-color: #000;
     color: #fff;
 }
 
-
-.widgets #widgetHeirarchyContainer{
+.widgets #widgetHeirarchyContainer {
     flex: 1;
     padding: 5px;
 }
-.widgets ul#widgetHierarchy{
+
+.widgets ul#widgetHierarchy {
     list-style-type: none;
     padding: 0 10px;
     max-height: 50vh;
     overflow-y: auto;
 }
 
-
-.widgets ul#widgetHierarchy li{
+.widgets ul#widgetHierarchy li {
     padding: 10px;
 }
-.widgets ul#widgetHierarchy li.selected{
+
+.widgets ul#widgetHierarchy li.selected {
     background-color: #dcdcdc;
 }
-.widgets ul#widgetHierarchy li a{
+
+.widgets ul#widgetHierarchy li a {
     cursor: pointer;
 }
 
 /* WIDGETS */
 
-
 /* TOOLBAR */
-.toolbar{
+
+.toolbar {
     flex: 1;
     /* height: 100vh; */
     flex-direction: column;
     display: flex;
     border-left: solid 1px #000;
 }
-.toolbar h3{
+
+.toolbar h3 {
     padding: 0 20px;
 }
-.toolbar h4{
+
+.toolbar h4 {
     padding: 0 20px;
     color: darkslateblue;
     text-decoration: underline;
@@ -200,117 +299,132 @@ ul.widgetControls li a:hover{
     margin: 5px 0;
 }
 
-.toolbar #toolbarControls{
+.toolbar #toolbarControls {
     flex: 1;
     padding: 0 10px;
 }
-.toolbar .control-row, .toolbar .control-row-skip{
+
+.toolbar .control-row, .toolbar .control-row-skip {
     flex-direction: row;
     display: flex;
     padding-bottom: 5px;
 }
-.toolbar .control-row label,
-.toolbar .control-row-skip label{ 
+
+.toolbar .control-row label, .toolbar .control-row-skip label {
     flex: 1;
     /* text-transform: capitalize; */
 }
-.toolbar .control-row input,
-.toolbar .control-row-skip input{ 
+
+.toolbar .control-row input, .toolbar .control-row-skip input {
     /* flex: 1; */
     width: 80px;
 }
 
-.toolbar .animation-control{
+.toolbar .animation-control {
     border-top: solid 1px #000;
     flex: 1;
     width: 100%;
     height: 100px;
 }
 
-.toolbar .control{
+.toolbar .control {
     align-self: flex-end;
     width: 100%;
 }
-.toolbar .control input[type=button]{
+
+.toolbar .control input[type=button] {
     width: 100%;
     padding: 10px;
 }
-.toolbar #deleteButton{
-    background-color: red;
+
+.toolbar #deleteButton {
     color: #fff;
     border-radius: 5px;
     float: right;
 }
-.toolbar #deleteButton i{
+
+.toolbar #deleteButton i {
     color: #fff;
     background-color: #fff;
 }
+
 /* TOOLBAR */
 
 /* ANIMATION */
-#addAnimationPanel{
+
+#addAnimationPanel {
     display: flex;
     flex-direction: row;
 }
-#addAnimationPanel select{
+
+#addAnimationPanel select {
     flex: 1;
     padding: 10px;
 }
-#addAnimationPanel input[type=button]{
+
+#addAnimationPanel input[type=button] {
     width: 40px;
     font-size: 30px;
 }
-#toolbarAnimations{
+
+#toolbarAnimations {
     padding: 10px;
-    
-    max-height: 25vh;
+    max-height: 22vh;
     overflow-y: auto;
 }
 
-#toolbarAnimations .animation-row{
+#toolbarAnimations .animation-row {
     display: block;
     padding-bottom: 10px;
 }
- #toolbarAnimations .animation-row > *{display: block;}
 
+#toolbarAnimations .animation-row>* {
+    display: block;
+}
 
- .animation-blocks{
-     padding: 10px;
-     display: flex;
-     flex-wrap: wrap;
- }
+#toolbarAnimations .animation-row input {
+    width: 100px;
+}
 
- .animation-blocks .chip{
-     padding: 5px;
-     font-size: 12px;
-     background-color: #a9a9a9;
-     border-radius: 5px;
-     border: solid 1px #dcdcdc;
-     color: #fff;
-     text-align: center;
-     vertical-align: middle;
- }
- .animation-blocks .chip.selected-chip{
-     background-color: cadetblue;
- }
- .animation-blocks .chip.add{
+.animation-blocks {
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.animation-blocks .chip {
+    padding: 5px;
+    font-size: 12px;
+    background-color: #a9a9a9;
+    border-radius: 5px;
+    border: solid 1px #dcdcdc;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    align-self: center;
+}
+
+.animation-blocks .chip.selected-chip {
+    background-color: cadetblue;
+}
+
+.animation-blocks .chip.add {
     padding: 0;
-     background-color: chocolate;
-     font-size: 25px;
-     text-align: center;
-     width: 30px;
- }
+    background-color: chocolate;
+    font-size: 25px;
+    text-align: center;
+    width: 30px;
+}
 
- #toolbarAnimations .remove-btn{
-    transform: scale(0.6,0.6) rotate(45deg);
- }
+#toolbarAnimations .remove-btn {
+    transform: scale(0.6, 0.6) rotate(45deg);
+}
+
 /* ANIMATION */
 
-
-
-
 /* CODE BOX */
-.cover{
+
+.cover {
     position: absolute;
     top: 0;
     left: 0;
@@ -320,7 +434,7 @@ ul.widgetControls li a:hover{
     filter: opacity(.5);
 }
 
-.code-box{
+.code-box {
     position: absolute;
     width: 50%;
     height: 50%;
@@ -332,41 +446,46 @@ ul.widgetControls li a:hover{
     flex-direction: column;
 }
 
-.export-box-header{
+.export-box-header {
     display: flex;
     flex-direction: row;
     height: 50px;
     padding: 10px;
 }
-.export-box-header h3{
+
+.export-box-header h3 {
     flex: 1;
 }
-.export-box-header a{
+
+.export-box-header a {
     align-self: end;
 }
-.export-code-body{
+
+.export-code-body {
     flex: 1;
     padding: 0 2% 5% 2%;
 }
-.export-code-body #export-area{
+
+.export-code-body #export-area {
     width: 100%;
     border: solid 1px #000;
     height: 100%;
     resize: none;
     /* white-space: pre-wrap; */
 }
+
 /* CODE BOX */
 
 /* POINTS BOX */
 
-.body .path-points-box{
+.body .path-points-box {
     background-color: #fff;
     width: 100%;
     /* position: absolute; */
     /* bottom: 0; */
 }
 
-.point-chip{
+.point-chip {
     padding: 5px;
     font-size: 12px;
     background-color: #dcdcdc;
@@ -378,4 +497,5 @@ ul.widgetControls li a:hover{
     margin: 0 5px 5px 0;
     width: 100px;
 }
+
 /* POINTS BOX */

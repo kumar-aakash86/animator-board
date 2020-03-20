@@ -131,6 +131,7 @@ svgWidgets = (function (svgObjects) {
 
             button.addEventListener('click', function () {
                 _selected = this.getAttribute('data-index');
+                _selectedAnimation = 0;
                 svgProps.saveButton.style.visibility = 'visible';
                 svgProps.deleteButton.style.visibility = 'visible';
                 renderToolbar();
@@ -176,13 +177,17 @@ svgWidgets = (function (svgObjects) {
         }
 
         if (item['haveAnimation']) {
-
             createAnimationBlock(item.animations);
 
-            if(item.animations.length > 0){
+            if (item.animations.length > 0) {
                 animationContainer.classList.remove('hide');
                 setAnimationProps(item);
                 renderAnimationProps(item.animations);
+            }
+            else {
+                animationContainer.classList.add('hide');
+                setAnimationProps(null);
+                renderAnimationProps(null);
             }
         }
         else
@@ -195,9 +200,11 @@ svgWidgets = (function (svgObjects) {
 
         for (let child of toolbarControls.childNodes) {
             const c = child.childNodes;
-            const input = c[1].childNodes;
-            if ((!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this') && input[0])
-                props[c[0].innerHTML.toLowerCase()] = input[0].value;
+            if (c.length > 1) {
+                const input = c[1].childNodes;
+                if ((!c[0].hasAttribute('data-key') || c[0].getAttribute('data-key') != 'skip-this') && input[0])
+                    props[c[0].innerHTML.toLowerCase()] = input[0].value;
+            }
         }
 
         const pointKey = item['break'];
@@ -262,6 +269,9 @@ svgWidgets = (function (svgObjects) {
     function setAnimationProps(item) {
         addAnimationPanel.innerHTML = "";
 
+        if (!item)
+            return;
+
         let anim = item.animations[_selectedAnimation];
 
         const animateProps = svgObjects.animate.getAnimateProperties(anim);
@@ -269,10 +279,10 @@ svgWidgets = (function (svgObjects) {
         let animateSelect = document.createElement("select");
         animateSelect.setAttribute('id', 'animateSelect');
 
-        animateProps.forEach((item) => {
+        animateProps.forEach((prop) => {
             let option = document.createElement("option");
-            option.text = item;
-            option.value = item;
+            option.text = prop;
+            option.value = prop;
             animateSelect.appendChild(option);
         });
 
@@ -286,6 +296,7 @@ svgWidgets = (function (svgObjects) {
         addAnimatebutton.addEventListener('click', function () {
             if (item) {
                 const anims = item.animations;
+
                 saveAnimationProps(anims);
 
                 if (anims) {
@@ -311,14 +322,14 @@ svgWidgets = (function (svgObjects) {
                 props[input[0].getAttribute('data-key')] = input[0].value;
             }
             anims[_selectedAnimation] = props;
-            resolve();
+            resolve(anims);
         });
     }
 
     function renderAnimationProps(anims) {
         toolbarAnimations.innerHTML = "";
 
-        if (anims) {  
+        if (anims) {
             let anim = anims[_selectedAnimation];
             if (anim)
                 for (let [key, value] of Object.entries(anim)) {
@@ -393,6 +404,7 @@ svgWidgets = (function (svgObjects) {
 
     function createAnimationBlock(anims) {
 
+
         let animationBlocks = document.createElement('div');
         animationBlocks.classList.add('animation-blocks');
 
@@ -417,9 +429,9 @@ svgWidgets = (function (svgObjects) {
         chip.classList.add('chip');
         chip.classList.add('add');
         chip.innerText = '+';
-        chip.addEventListener('click', function () {
+        chip.addEventListener('click', async function () {            
             anims.push({});
-            saveAnimationProps(anims);
+            anims = await saveAnimationProps(anims);
             renderToolbar();
         });
         animationBlocks.appendChild(chip);

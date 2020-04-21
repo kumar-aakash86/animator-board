@@ -450,6 +450,19 @@ ul.widgetControls li a:hover {
     flex-direction: column;
 }
 
+.giturl a{
+    background-color: #fff;
+    display: block;
+    margin: 10px;
+}
+.giturl a:hover{
+    box-shadow: #000 2px 2px 5px;
+}
+
+.giturl a:focus, .giturl a:active{
+    box-shadow: none;
+}
+
 .export-box-header {
     display: flex;
     flex-direction: row;

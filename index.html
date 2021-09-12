@@ -13,27 +13,32 @@
     <div id="container">
         <div id="header">
             <div class="logo">SVG Generator</div>
-            <div class="middle">
-                <div class="dimensions">
-                    <label for="">Width</label>
-                    <input type="number" name="" id="frameWidth" value="200">
-                    &nbsp;&nbsp;|&nbsp;&nbsp;                    
-                    <label for="">Height</label>
-                    <input type="number" name="" id="frameHeight"  value="200">
-                    &nbsp;&nbsp;|&nbsp;&nbsp;                  
-                    <label for="">ViewBox</label>
-                    <input type="text" name="" id="viewBox"  value="0 0 100 100">
-                    &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <input type="button" value="SET DIMENSION" id="dimensionButton" class="border">
-                </div>
-            </div>
-            <div class="giturl">
-                <a href="https://github.com/kumar-aakash86/animator-board" target="_blank">
+            <div class="right">
+                <button id="settingsButton" class="white-button p10">Settings</button>
+                <!-- <div class="giturl"> -->
+                <a class="white-button p10 m10" href="https://www.w3schools.com/graphics/svg_intro.asp">Learn</a>
+                <a class="white-button" href="https://github.com/kumar-aakash86/animator-board" target="_blank">
                     <img src="styles/github-768x285.png" width="80px">
                 </a>
+                <!-- </div> -->
+                <div class="export">
+                    <input type="button" value="EXPORT" id="exportButton">
+                </div>
             </div>
-            <div class="export">
-                <input type="button" value="EXPORT" id="exportButton">
+        </div>
+
+        <div id="settingBox" class="middle hide">
+            <div class="dimensions">
+                <label for="">Width</label>
+                <input type="number" name="" id="frameWidth" value="200">
+                <label for="">Height</label>
+                <input type="number" name="" id="frameHeight" value="200">
+                <label for="">ViewBox</label>
+                <input type="text" name="" id="viewBox" value="0 0 100 100">
+                <input type="button" value="SET DIMENSION" id="dimensionButton" class="border">
+                <hr>
+                <label for="">Examples</label>
+                <select name="" id="selectExample"></select>
             </div>
         </div>
         <div id="wrapper">
@@ -56,22 +61,31 @@
                 <div class="path-points-box">
 
                 </div>
+                <div id="previewSize">
+                    200 x 200
+                </div>
             </div>
             <div class="toolbar">
                 <h3>Properties <a id="deleteButton" class="icon-btn red-button">
-                    <div class="glyph fs1">
-                        <div class="clearfix pbs">
-                            <svg class="icon icon-bin"><use xlink:href="styles/symbol-defs.svg#icon-bin"></use></svg>
+                        <div class="glyph fs1">
+                            <div class="clearfix pbs">
+                                <svg class="icon icon-bin">
+                                    <use xlink:href="styles/symbol-defs.svg#icon-bin"></use>
+                                </svg>
+                            </div>
                         </div>
-                    </div></a> </h3>
+                    </a> </h3>
                 <h4 id="selectedLabel"></h4>
                 <div id="toolbarControls"></div>
                 <div class="animation-control hide">
                     <h3>Animation
                         <a id="deleteAnimationButton" class="icon-btn red-button fr">
                             <div class="glyph fs1">
-                                    <svg class="icon icon-bin"><use xlink:href="styles/symbol-defs.svg#icon-bin"></use></svg>
-                        </div></a>
+                                <svg class="icon icon-bin">
+                                    <use xlink:href="styles/symbol-defs.svg#icon-bin"></use>
+                                </svg>
+                            </div>
+                        </a>
                     </h3>
                     <div id="addAnimationPanel">
                     </div>
@@ -83,15 +97,19 @@
             </div>
         </div>
         <div class="footer">
-            <span>Created by&nbsp;&nbsp;<a href="https://github.com/kumar-aakash86" target="_blank">Aakash Kumar</a></span>
+            <span>Created by&nbsp;&nbsp;<a href="https://github.com/kumar-aakash86" target="_blank">Aakash
+                    Kumar</a></span>
             &nbsp;&nbsp;<span>|</span>&nbsp;&nbsp;
             <span>
                 <div class="glyph fs1">
                     <div class="clearfix pbs">
-                        <svg class="icon icon-github"><use xlink:href="styles/symbol-defs.svg#icon-github"></use></svg>
+                        <svg class="icon icon-github">
+                            <use xlink:href="styles/symbol-defs.svg#icon-github"></use>
+                        </svg>
                     </div>
                 </div>
-                <a href="https://github.com/kumar-aakash86/animator-board" target="_blank">Source Code</a></span>
+                <a href="https://github.com/kumar-aakash86/animator-board" target="_blank">Source Code</a>
+            </span>
         </div>
     </div>
 
@@ -99,6 +117,7 @@
 
 
     <script src="js/svg-objects.js"></script>
+    <script src="js/data.js"></script>
     <script src="js/app.js"></script>
 
     <script>

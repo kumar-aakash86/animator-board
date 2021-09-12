@@ -1,8 +1,11 @@
 :root {
     --app-bg-color: blueviolet;
+    --header-height: 50px;
+    --body-height: calc(100vh - val(var(--header-height)));
 }
 
-html, body {
+html,
+body {
     padding: 0;
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
@@ -19,13 +22,19 @@ html, body {
 .red {
     color: red;
 }
-
+.p10 {
+    padding: 10px;
+}
+.m10 {
+    padding: 10px;
+}
 
 .red-button {
     background-color: red;
     border-radius: 5px;
 }
-.clearfix:before, .clearfix:after {
+.clearfix:before,
+.clearfix:after {
     content: " ";
     display: table;
 }
@@ -34,7 +43,7 @@ html, body {
     clear: both;
 }
 
-input[type=button] {
+input[type="button"] {
     font-weight: bold;
     color: #fff;
     background-color: cadetblue;
@@ -43,7 +52,7 @@ input[type=button] {
     cursor: pointer;
 }
 
-input[type=button].border {
+input[type="button"].border {
     border: solid 2px #fff;
 }
 
@@ -52,7 +61,8 @@ a {
     text-decoration: none;
 }
 
-a.icon-btn i, a.icon-btn[class^='icono'] {
+a.icon-btn i,
+a.icon-btn[class^="icono"] {
     transform: scale(0.6, 0.6);
     color: red;
 }
@@ -63,6 +73,23 @@ a.icon-btn i, a.icon-btn[class^='icono'] {
 
 .show {
     display: block;
+}
+
+.white-button {
+    background-color: #fff;
+    display: block;
+    margin: 10px;
+    align-self: center;
+    justify-self: center;
+    border: none;
+    font-size: 12px;
+    color: #000;
+    cursor: pointer;
+}
+
+.white-button:focus,
+.white-button:active {
+    box-shadow: none;
 }
 
 pre {
@@ -106,7 +133,7 @@ pre {
     display: inline-block;
     font-size: 16px;
     width: 1em;
-    padding: .2em .5em;
+    padding: 0.2em 0.5em;
 }
 
 svg {
@@ -120,30 +147,7 @@ svg {
     background-color: var(--app-bg-color);
     display: flex;
     flex-direction: row;
-}
-
-#header .middle {
-    flex: 1;
-    border-left: solid 1px #fff;
-}
-
-#header .middle .dimensions {
-    display: flex;
-    flex-wrap: nowrap;
-    padding: 10px;
-    color: #fff;
-}
-
-#header .middle .dimensions>label {
-    padding: 5px 10px;
-}
-
-#header .middle .dimensions>input[type=number] {
-    width: 50px;
-}
-
-#header .middle .dimensions>input[type=text] {
-    width: 100px;
+    justify-content: space-between;
 }
 
 #header .logo {
@@ -159,9 +163,15 @@ svg {
     height: 100%;
 }
 
-#header .export input[type=button] {
+#header .export input[type="button"] {
     height: 100%;
     padding: 0 20px;
+}
+
+#header .right {
+    display: flex;
+    flex-direction: row;
+    justify-self: flex-end;
 }
 
 /* HEADER */
@@ -188,6 +198,40 @@ svg {
 }
 
 /* FOOTER */
+
+/* SETTING BOX */
+
+#settingBox {
+    position: absolute;
+    right: 10px;
+    top: var(--header-height);
+    background-color: white;
+    flex: 1;
+    border-left: solid 1px #fff;
+    z-index: 999;
+    box-shadow: 5px 10px 8px #888888;
+}
+
+#settingBox .dimensions {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 10px;
+    color: #000;
+}
+
+#settingBox .middle .dimensions > label {
+    padding: 5px 10px;
+}
+
+#settingBox .middle .dimensions > input[type="number"] {
+    width: 50px;
+}
+
+#settingBox .middle .dimensions > input[type="text"] {
+    width: 100px;
+}
+/* SETTING BOX */
 
 #wrapper {
     flex: 1;
@@ -217,6 +261,15 @@ svg {
     background-color: #fff;
 }
 
+.body #previewSize {
+    padding: 10px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #fff;
+    font-size: 16px;
+}
+
 /* WIDGETS */
 
 .widgets {
@@ -237,7 +290,6 @@ svg {
 
 ul.widgetControls li {
     width: 100%;
-    ;
 }
 
 ul.widgetControls li a {
@@ -305,18 +357,21 @@ ul.widgetControls li a:hover {
     padding: 0 10px;
 }
 
-.toolbar .control-row, .toolbar .control-row-skip {
+.toolbar .control-row,
+.toolbar .control-row-skip {
     flex-direction: row;
     display: flex;
     padding-bottom: 5px;
 }
 
-.toolbar .control-row label, .toolbar .control-row-skip label {
+.toolbar .control-row label,
+.toolbar .control-row-skip label {
     flex: 1;
     /* text-transform: capitalize; */
 }
 
-.toolbar .control-row input, .toolbar .control-row-skip input {
+.toolbar .control-row input,
+.toolbar .control-row-skip input {
     /* flex: 1; */
     width: 80px;
 }
@@ -333,7 +388,7 @@ ul.widgetControls li a:hover {
     width: 100%;
 }
 
-.toolbar .control input[type=button] {
+.toolbar .control input[type="button"] {
     width: 100%;
     padding: 10px;
 }
@@ -363,7 +418,7 @@ ul.widgetControls li a:hover {
     padding: 10px;
 }
 
-#addAnimationPanel input[type=button] {
+#addAnimationPanel input[type="button"] {
     width: 40px;
     font-size: 30px;
 }
@@ -379,7 +434,7 @@ ul.widgetControls li a:hover {
     padding-bottom: 10px;
 }
 
-#toolbarAnimations .animation-row>* {
+#toolbarAnimations .animation-row > * {
     display: block;
 }
 
@@ -420,7 +475,7 @@ ul.widgetControls li a:hover {
 /* #toolbarAnimations .remove-btn {
     color: red;
 } */
-#toolbarAnimations .remove-btn svg{
+#toolbarAnimations .remove-btn svg {
     color: red;
 }
 
@@ -435,7 +490,7 @@ ul.widgetControls li a:hover {
     right: 0;
     bottom: 0;
     background-color: #000;
-    filter: opacity(.5);
+    filter: opacity(0.5);
 }
 
 .code-box {
@@ -448,19 +503,6 @@ ul.widgetControls li a:hover {
     background-color: #fff;
     display: flex;
     flex-direction: column;
-}
-
-.giturl a{
-    background-color: #fff;
-    display: block;
-    margin: 10px;
-}
-.giturl a:hover{
-    box-shadow: #000 2px 2px 5px;
-}
-
-.giturl a:focus, .giturl a:active{
-    box-shadow: none;
 }
 
 .export-box-header {

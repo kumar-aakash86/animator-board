@@ -2,7 +2,7 @@ svgObjects = (function () {
 
     circle = (function () {
 
-        getShape = () => {
+        getShape = (_anims) => {
             return {
                 type: 'circle',
                 props: {
@@ -13,8 +13,8 @@ svgObjects = (function () {
                     'stroke': '#000',
                     'stroke-width': 2
                 },
-                haveAnimation: false,
-                animations: []
+                haveAnimation: _anims ? true : false,
+                animations: _anims ?? []
             };
         }
 
@@ -22,10 +22,10 @@ svgObjects = (function () {
             getShape
         }
     })();
-    
+
     ellipse = (function () {
 
-        getShape = () => {
+        getShape = (_anims) => {
             return {
                 type: 'ellipse',
                 props: {
@@ -37,8 +37,8 @@ svgObjects = (function () {
                     'stroke': '#000',
                     'stroke-width': 2
                 },
-                haveAnimation: false,
-                animations: []
+                haveAnimation: _anims ? true : false,
+                animations: _anims ?? []
             };
         }
 
@@ -49,7 +49,7 @@ svgObjects = (function () {
 
     rect = (function () {
 
-        getShape = () => {
+        getShape = (_anims) => {
             return {
                 type: 'rect',
                 props: {
@@ -61,7 +61,8 @@ svgObjects = (function () {
                     'stroke': '#000',
                     'stroke-width': 2
                 },
-                animations: []
+                haveAnimation: _anims ? true : false,
+                animations: _anims ?? []
             };
         }
 
@@ -71,10 +72,10 @@ svgObjects = (function () {
         }
     })();
 
-    
+
     line = (function () {
 
-        getShape = () => {
+        getShape = (_anims) => {
             return {
                 type: 'line',
                 props: {
@@ -85,7 +86,8 @@ svgObjects = (function () {
                     'stroke': '#000',
                     'stroke-width': 2
                 },
-                animations: []
+                haveAnimation: _anims ? true : false,
+                animations: _anims ?? []
             };
         }
 
@@ -94,11 +96,11 @@ svgObjects = (function () {
             getShape
         }
     })();
-    
-    
+
+
     polygon = (function () {
 
-        getShape = () => {
+        getShape = (_anims) => {
             return {
                 type: 'polygon',
                 break: 'points',
@@ -108,7 +110,8 @@ svgObjects = (function () {
                     'stroke': '#000',
                     'stroke-width': 2
                 },
-                animations: []
+                haveAnimation: _anims ? true : false,
+                animations: _anims ?? []
             };
         }
 
@@ -119,11 +122,11 @@ svgObjects = (function () {
     })();
 
 
-    animate = (function(){
+    animate = (function () {
         const animateProps = [
-          'attributeName', 'begin', 'dur', 'end', 'min', 'max', 'restart', 'repeatCount', 'repeatDur', 'fill', 'calcMode', 'values', 'keyTimes', 'keySplines', 'from', 'to', 'by', 
+            'attributeName', 'begin', 'dur', 'end', 'min', 'max', 'restart', 'repeatCount', 'repeatDur', 'fill', 'calcMode', 'values', 'keyTimes', 'keySplines', 'from', 'to', 'by',
         ]
-        getAnimateProperties = (obj = {}) => {     
+        getAnimateProperties = (obj = {}) => {
             let keys = Object.keys(obj);
             return animateProps.filter((el) => {
                 return !keys.includes(el);
@@ -131,14 +134,14 @@ svgObjects = (function () {
         }
 
         addProp = (name, obj) => {
-            if(!obj)
+            if (!obj)
                 obj = {};
             // animateProps = animateProps.filter((item) => item != name);
 
-            if(name == null)
+            if (name == null)
                 return obj;
-             obj[name] = '';
-             return obj;
+            obj[name] = '';
+            return obj;
         }
 
         removeProp = (name, obj) => {

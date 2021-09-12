@@ -7,6 +7,7 @@ svgWidgets = (function (svgObjects) {
     let codeBox = document.querySelector('.code-box');
     let widgetHierarchy = document.querySelector('#widgetHierarchy');
     let toolbarControls = document.querySelector('#toolbarControls');
+    let previewSize = document.querySelector('#previewSize');
 
     let _selected = -1, _selectedAnimation = 0;
 
@@ -14,6 +15,11 @@ svgWidgets = (function (svgObjects) {
     let addAnimationPanel = document.querySelector('#addAnimationPanel');
     let toolbarAnimations = document.querySelector('#toolbarAnimations');
     let pathPointBox = document.querySelector('.path-points-box');
+
+    let settingsButton = document.querySelector('#settingsButton');
+    let settingBox = document.querySelector('#settingBox');
+    let selectExample = document.querySelector('#selectExample');
+    let showSetting = false;
 
     let width = 100, height = 100;
 
@@ -43,9 +49,12 @@ svgWidgets = (function (svgObjects) {
         svgProps.exportButton.addEventListener('click', exportSVG);
 
         svgProps.dimensionButton.addEventListener('click', changeDimension);
+
+        generateExampleList();
     }
 
     function addWidget(type) {
+        hideSetting();
         let widget;
         switch (type) {
             case 'circle':
@@ -74,6 +83,7 @@ svgWidgets = (function (svgObjects) {
     changeDimension = () => {
         previewBox.style.width = svgProps.frameWidth.value + 'px';
         previewBox.style.height = svgProps.frameHeight.value + 'px';
+        previewSize.innerHTML = svgProps.frameWidth.value + ' x ' + svgProps.frameHeight.value;
         rerender();
     }
 
@@ -136,6 +146,7 @@ svgWidgets = (function (svgObjects) {
                 svgProps.deleteButton.style.visibility = 'visible';
                 renderToolbar();
                 renderHierarchy();
+                hideSetting();
             });
         }
     }
@@ -252,6 +263,7 @@ svgWidgets = (function (svgObjects) {
 
         wrapper.querySelector('#closeButton').addEventListener('click', closeExportBox);
 
+        hideSetting();
         if (document.body != null)
             document.body.appendChild(wrapper);
     }
@@ -429,7 +441,7 @@ svgWidgets = (function (svgObjects) {
         chip.classList.add('chip');
         chip.classList.add('add');
         chip.innerText = '+';
-        chip.addEventListener('click', async function () {            
+        chip.addEventListener('click', async function () {
             anims.push({});
             anims = await saveAnimationProps(anims);
             renderToolbar();
@@ -499,6 +511,9 @@ svgWidgets = (function (svgObjects) {
             widgetList.splice(_selected, 1);
             _selected = -1;
             createPointsBlock();
+            addAnimationPanel.innerHTML = "";
+            toolbarAnimations.innerHTML = "";
+            animationContainer.classList.add('hide');
             rerender();
         }
     }
@@ -517,6 +532,41 @@ svgWidgets = (function (svgObjects) {
             rerender();
         }
     }
+
+    settingsButton.addEventListener('click', function () {
+        showSetting = !showSetting;
+        if (showSetting) {
+            settingBox.classList.remove('hide');
+        }
+        else {
+            hideSetting();
+        }
+    });
+
+    function hideSetting() {
+        selectExample.selectedIndex = 0;
+        settingBox.classList.add('hide');
+    }
+
+    function generateExampleList() {
+        let option = document.createElement('option');
+        option.innerHTML = "Select";
+        selectExample.appendChild(option);
+        examples.forEach(function (item, i) {
+            option = document.createElement('option');
+            option.value = i;
+            option.innerHTML = item.name;
+            selectExample.appendChild(option);
+        });
+    }
+
+    selectExample.addEventListener('change', function () {
+        if (selectExample.selectedIndex > 0) {
+            console.log(examples[selectExample.selectedIndex - 1].data);
+            widgetList.push(examples[selectExample.selectedIndex - 1].data);
+            rerender();
+        }
+    })
 
     return {
         addWidget,
